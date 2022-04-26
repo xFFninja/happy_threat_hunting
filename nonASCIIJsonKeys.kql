@@ -1,0 +1,3 @@
+| extend url_has_json = extract_all(@’json=\\?{“(?P<key>.*?)”:”.*?\\?}’, UrlOriginal)
+| mv-apply url_has_json on (summarize has_non_ascii = countif(isascii(tostring(url_has_json))==false))
+| where has_non_ascii >= 1
