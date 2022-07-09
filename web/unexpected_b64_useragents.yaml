@@ -1,0 +1,19 @@
+title: Unexpected User Agent
+description: Detects Base64 encoded User Agent strings
+id: 3a5f70fa-ff58-11ec-b939-0242ac120002
+status: stable
+references:
+  - https://blogs.jpcert.or.jp/en/2022/07/yamabot.html
+author: xffninja
+date: 2022/07/09
+tags:
+  - attack.command_and_control
+  - attack.t1071.001
+logsource:
+  product: proxy
+detection:
+  selection:
+    c-useragent|re: 
+      - '(?:[A-Za-z0–9+/]{4})*(?:[A-Za-z0–9+/]{3}=|[A-Za-z0–9+/]{2}==)'
+  condition: selection
+level: high
