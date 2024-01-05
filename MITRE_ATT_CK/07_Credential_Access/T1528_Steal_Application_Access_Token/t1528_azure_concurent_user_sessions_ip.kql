@@ -1,0 +1,4 @@
+SigninLogs
+| where ResultType == 0
+| summarize ip_list=make_set(IPAddress) by Id, UserPrincipalName
+| where array_length(ip_list) > 1

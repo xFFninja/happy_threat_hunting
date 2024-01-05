@@ -1,0 +1,5 @@
+let threshold = 5;
+SigninLogs
+| where ResultType == 500121
+| summarize count() by UserPrincipalName, bin(TimeGenerated, 5m)
+| where count_ > threshold

@@ -1,0 +1,5 @@
+AuditLogs
+| where Category =~ 'ApplicationManagement'
+| where OperationName has 'Consent to application'
+| where Result =~ 'failure'
+| where Targetresources[0].modifiedProperties[5].newValue =~ 'Risky application detected'

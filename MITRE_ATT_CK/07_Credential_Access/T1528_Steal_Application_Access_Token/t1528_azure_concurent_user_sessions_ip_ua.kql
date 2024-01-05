@@ -1,0 +1,6 @@
+SigninLogs
+| where ResultType == 0
+| where IsInteractive == false
+| summarize ip_list=make_set(IPAddress), ua_list=makeset(UserAgent) by Id, UserPrincipalName
+| where array_length(ip_list) > 1
+| where array_length(ua_list) > 1

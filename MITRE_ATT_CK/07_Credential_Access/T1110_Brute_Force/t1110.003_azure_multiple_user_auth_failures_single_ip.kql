@@ -1,0 +1,5 @@
+let threshold = 10;
+SigninLogs
+| where ResultType == 50126
+| summarize user_list=make_set(UserPrincipalName) by IPAddress, bin(TimeGenerated, 5m)
+| where array_length(user_list) > threshold

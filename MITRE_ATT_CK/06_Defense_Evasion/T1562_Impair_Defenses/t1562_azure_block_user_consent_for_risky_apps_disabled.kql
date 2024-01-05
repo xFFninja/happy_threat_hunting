@@ -1,0 +1,9 @@
+AuditLogs
+| where OperationName has 'Update authorization policy'
+| extend ModifiedProperties = TargetResources[0].modifiedProperties
+| mv-apply Property = ModifiedProperties on
+    (
+        where.Property.displayName =~ 'AllowUserConsentForRiskyApps'
+        | extend isEnabled = Property.newValue
+    )
+| where isEnabled has 'true'

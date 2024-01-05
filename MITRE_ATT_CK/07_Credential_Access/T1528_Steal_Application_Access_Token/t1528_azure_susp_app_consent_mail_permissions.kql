@@ -1,0 +1,18 @@
+let mail_permissions = dynamic(['Mail.Read', 'Mail.ReadBasic', 'Mail.ReadWrite', 'Mail.Read.Shared', 'Mail.ReadWrite.Shared', 'Mail.Send', 'Mail.Send.Shared']);
+AuditLogs
+| where Category =~ 'ApplicationManagement'
+| where OperationName has 'Consent to application'
+| where Result =~ 'success'
+| extend ModifiedProperties = TargetResources[0].modifiedProperties
+| mv-apply Property = ModifiedProperties on
+    (
+        where.Property.displayName =~ 'ConsentContext.IsAdminConsent'
+        | extend IsAdminConsent = Property.newValue
+    )
+| mv-apply Property = ModifiedProperties on
+    (
+        where.Property.displayName =~ 'ConsentAction.Permissions'
+        | extend AppPermissions = Property.newValue
+    )
+| where IsAdminConsent has 'Failure'
+| where AppPermissions has_any (mail_permissions)

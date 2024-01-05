@@ -1,0 +1,5 @@
+let threshold = 2;
+SigninLogs
+| where ResultType == 50126
+| summarize user_agent_list=make_set(UserAgent) by IPAddress, UserPrincipalName, bin(TimeGenerated, 1m)
+| where array_length(user_agent_list) > threshold

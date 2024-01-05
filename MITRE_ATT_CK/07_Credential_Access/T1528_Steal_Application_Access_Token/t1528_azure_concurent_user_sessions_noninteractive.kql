@@ -1,0 +1,5 @@
+AADNonInteractiveUserSignInLogs
+| where ResultType == 0
+| where IsInteractive == false
+| summarize ip_list=make_set(IPAddress), make_set(AppDisplayName) by Id, UserPrincipalName
+| where array_length(ip_list) > 1

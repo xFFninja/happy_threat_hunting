@@ -1,0 +1,10 @@
+let combo_threshold = 10;
+let user_threshold = 10;
+let ip_threshold = 10;
+SigninLogs
+| where ResultType == 50126
+| extend combo_user_ip = strcat(UserPrincipalName, '-', IPAddress)
+| summarize user_list=make_set(UserPrincipalName), combo_list=make_set(combo_user_ip), ip_list=make_set(IPAddress) by bin(TimeGenerated, 5m)
+| where array_length(combo_list) > combo_threshold
+| where array_length(user_list) > user_threshold
+| where array_length(ip_list) > ip_threshold
